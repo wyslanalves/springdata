@@ -9,17 +9,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.alura.spring.data.orm.Cargo;
 import br.com.alura.spring.data.repository.CargoRepository;
+import br.com.alura.spring.data.service.CrudCargoService;
 
 @SpringBootApplication
 public class SpringDataApplication implements CommandLineRunner{
+	
+	private final CrudCargoService cargoService;
 	
 	private Boolean system = true;
 
 	@Autowired
 	private CargoRepository cargoRepository;
 	
-	public SpringDataApplication(CargoRepository cargoRepository) {
-		this.cargoRepository = cargoRepository;
+	public SpringDataApplication(CrudCargoService cargoService) {
+		this.cargoService = cargoService;
 	}
 	
 	public static void main(String[] args) {
@@ -29,6 +32,20 @@ public class SpringDataApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		Scanner scanner = new Scanner(System.in);
+		
+		while (system) {
+			System.out.println("Qual acao voce quer executar");
+			System.out.println("0 - Sair");
+			System.out.println("1 - Cargo");
+			
+			int action = scanner.nextInt();
+			if(action == 1) {
+				cargoService.inicial(scanner);
+			}else {
+				system = false;
+			}
+		}
+		
 		Cargo cargo = new Cargo();
 		cargo.setDescricao("DESEVOLVEDOR DE SOFTWARE");
 		cargoRepository.save(cargo);
