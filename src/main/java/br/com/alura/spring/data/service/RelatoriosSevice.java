@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.spring.data.orm.Funcionario;
+import br.com.alura.spring.data.orm.FuncionarioProjecao;
 import br.com.alura.spring.data.repository.FuncionarioRepository;
 
 @Service
@@ -18,9 +19,6 @@ public class RelatoriosSevice {
 	
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
  
-// @formatter:on
-
-	
 	private FuncionarioRepository funcionarioRepository;
 	
 	public RelatoriosSevice(FuncionarioRepository funcionarioRepository) {
@@ -35,6 +33,7 @@ public class RelatoriosSevice {
 			System.out.println("1 - Busca Funcionario Nome");
 			System.out.println("2 - Busca Funcionario Nome, Data Contratação e Salario Maior");
 			System.out.println("3 - Busca Funcionario Data Contratação");
+			System.out.println("4 - Pesquisa Funcionario Salario");
 			
 
 			int action = scanner.nextInt();
@@ -48,6 +47,9 @@ public class RelatoriosSevice {
 				break;
 			case 3:
 				buscaFuncionarioDataContratacao(scanner);
+				break;
+			case 4:
+				pesquisaFuncionarioSalario();
 				break;
 			default:
 				system = false;
@@ -85,5 +87,10 @@ public class RelatoriosSevice {
 		LocalDate localDate = LocalDate.parse(data, formatter);
 		List<Funcionario> list = 	funcionarioRepository.findDataContratacaoMaior(localDate);
 		list.forEach(System.out::println);
+	}
+	
+	private void pesquisaFuncionarioSalario() {
+		List<FuncionarioProjecao> list = funcionarioRepository.findFuncionarioSalario();
+		list.forEach(f -> System.out.println("Funcionario: Id: " + f.getId() + " | Nome: " + f.getNome() + " | " + f.getSalario()));
 	}
 }
